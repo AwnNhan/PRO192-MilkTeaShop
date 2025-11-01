@@ -1,0 +1,161 @@
+package menumilkteamanagement;
+
+import java.util.*;
+import java.text.SimpleDateFormat;
+
+public class MenuMilkTeaManagement {
+    private static final Scanner sc = new Scanner(System.in);
+    private static final List<Ingredient> ingredientList = new ArrayList<>();
+    private static final List<Beverage> beverageList = new ArrayList<>();
+
+    public static void main(String[] args) {
+        runMenu();
+    }
+
+    // ===== MENU CHÍNH =====
+    public static void runMenu() {
+        int choice;
+        do {
+            System.out.println("========== MENU QUẢN LÝ TRÀ SỮA ==========");
+            System.out.println("1. Quản lý Nguyên liệu");
+            System.out.println("2. Quản lý Đồ uống");
+            System.out.println("0. Thoát chương trình");
+            System.out.print("Nhập lựa chọn: ");
+            choice = Integer.parseInt(sc.nextLine());
+
+            switch (choice) {
+                case 1:
+                    handleIngredientMenu();
+                    break;
+                case 2:
+                    handleBeverageMenu();
+                    break;
+                case 0:
+                    System.out.println("Thoát chương trình. Tạm biệt!");
+                    break;
+                default:
+                    System.out.println("❌ Lựa chọn không hợp lệ!");
+                    break;
+            }
+        } while (choice != 0);
+    }
+
+    // ===== MENU NGUYÊN LIỆU =====
+    private static void handleIngredientMenu() {
+        int choice;
+        do {
+            System.out.println("\n--- QUẢN LÝ NGUYÊN LIỆU ---");
+            System.out.println("1. Thêm nguyên liệu mới");
+            System.out.println("2. Xem danh sách nguyên liệu");
+            System.out.println("0. Quay lại menu chính");
+            System.out.print("Nhập lựa chọn: ");
+            choice = Integer.parseInt(sc.nextLine());
+
+            switch (choice) {
+                case 1:
+                    addIngredient();
+                    break;
+                case 2:
+                    showIngredients();
+                    break;
+                case 0:
+                    System.out.println("Quay lại menu chính...");
+                    break;
+                default:
+                    System.out.println("❌ Lựa chọn không hợp lệ!");
+                    break;
+            }
+        } while (choice != 0);
+    }
+
+    // ===== MENU ĐỒ UỐNG =====
+    private static void handleBeverageMenu() {
+        int choice;
+        do {
+            System.out.println("\n--- QUẢN LÝ ĐỒ UỐNG ---");
+            System.out.println("1. Thêm đồ uống mới");
+            System.out.println("2. Xem danh sách đồ uống");
+            System.out.println("0. Quay lại menu chính");
+            System.out.print("Nhập lựa chọn: ");
+            choice = Integer.parseInt(sc.nextLine());
+
+            switch (choice) {
+                case 1:
+                    addBeverage();
+                    break;
+                case 2:
+                    showBeverages();
+                    break;
+                case 0:
+                    System.out.println("Quay lại menu chính...");
+                    break;
+                default:
+                    System.out.println("❌ Lựa chọn không hợp lệ!");
+                    break;
+            }
+        } while (choice != 0);
+    }
+
+    // ===== CHỨC NĂNG CHO MENU NGUYÊN LIỆU =====
+    private static void addIngredient() {
+        try {
+            System.out.print("Nhập ID nguyên liệu: ");
+            String id = sc.nextLine();
+            System.out.print("Tên nguyên liệu: ");
+            String name = sc.nextLine();
+            System.out.print("Số lượng (kg): ");
+            double qty = Double.parseDouble(sc.nextLine());
+            System.out.print("Giá mỗi kg: ");
+            double cost = Double.parseDouble(sc.nextLine());
+
+            System.out.print("Ngày nhập (dd/MM/yyyy): ");
+            Date purchaseDate = new SimpleDateFormat("dd/MM/yyyy").parse(sc.nextLine());
+            System.out.print("Hạn sử dụng (dd/MM/yyyy): ");
+            Date expiryDate = new SimpleDateFormat("dd/MM/yyyy").parse(sc.nextLine());
+
+            // 🔹 Khớp với constructor cũ của em
+            Ingredient i = new Ingredient(qty, cost, purchaseDate, expiryDate, id, name);
+            ingredientList.add(i);
+            System.out.println("✅ Đã thêm nguyên liệu: " + i.getName());
+        } catch (Exception e) {
+            System.out.println("❌ Lỗi nhập dữ liệu: " + e.getMessage());
+        }
+    }
+
+    private static void showIngredients() {
+        System.out.println("\nDANH SÁCH NGUYÊN LIỆU:");
+        if (ingredientList.isEmpty()) {
+            System.out.println("⚠️ Chưa có nguyên liệu nào!");
+        } else {
+            for (Ingredient i : ingredientList) {
+                System.out.println(i);
+            }
+        }
+    }
+
+    // ===== CHỨC NĂNG CHO MENU ĐỒ UỐNG =====
+    private static void addBeverage() {
+        System.out.print("Nhập ID đồ uống: ");
+        String id = sc.nextLine();
+        System.out.print("Tên đồ uống: ");
+        String name = sc.nextLine();
+        System.out.print("Giá bán: ");
+        double price = Double.parseDouble(sc.nextLine());
+
+        // 🔹 Khớp với constructor cũ của em: (double sellPrice, String productID, String name)
+        Beverage b = new Beverage(price, id, name);
+        beverageList.add(b);
+        System.out.println("✅ Đã thêm đồ uống: " + b.getName());
+    }
+
+    private static void showBeverages() {
+        System.out.println("\nDANH SÁCH ĐỒ UỐNG:");
+        if (beverageList.isEmpty()) {
+            System.out.println("⚠️ Chưa có đồ uống nào!");
+        } else {
+            for (Beverage b : beverageList) {
+                System.out.println(b);
+            }
+        }
+    }
+}
